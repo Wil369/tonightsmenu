@@ -3,257 +3,379 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Tonight's Menu – Stop Wondering. Start Cooking.</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+<title>Tonight's Menu – AI Fridge Scanner → Instant Recipes</title>
+<meta name="description" content="Point your camera at your fridge. Get instant recipe suggestions. 105+ recipes including Caribbean classics."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Playfair+Display:wght@700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
 <style>
-  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-  :root { --gold:#E8A44A; --dark:#0D0D0D; --card:#141414; --text:#F5F0E8; --muted:#888; }
-  body { background:var(--dark); color:var(--text); font-family:'Inter',sans-serif; overflow-x:hidden; }
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --gold:#F0A830;--gold-light:#FFD47F;--dark:#08080A;--card:#111114;
+  --card-border:#1a1a1f;--text:#F2EDE4;--muted:#6b6b7b;--accent:#FF6B35;
+  --glow:rgba(240,168,48,.15);
+}
+html{scroll-behavior:smooth}
+body{background:var(--dark);color:var(--text);font-family:'Inter',sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
 
-  /* NAV */
-  nav { display:flex; justify-content:space-between; align-items:center; padding:24px 60px; position:fixed; top:0; width:100%; z-index:100; background:linear-gradient(to bottom,rgba(13,13,13,0.96),transparent); }
-  .logo { font-family:'Playfair Display',serif; font-size:1.2rem; color:var(--gold); letter-spacing:1px; }
-  .nav-cta { background:var(--gold); color:#000; font-weight:700; font-size:0.85rem; padding:10px 22px; border-radius:100px; text-decoration:none; transition:opacity .2s; }
-  .nav-cta:hover { opacity:.85; }
+/* ANIMATED GRAIN */
+body::after{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:.03;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
 
-  /* HERO */
-  .hero { min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:140px 24px 80px; background:radial-gradient(ellipse at 50% 0%,rgba(232,164,74,.13) 0%,transparent 65%); }
-  .eyebrow { font-size:.72rem; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--gold); margin-bottom:20px; }
-  .hero h1 { font-family:'Playfair Display',serif; font-size:clamp(2.8rem,7.5vw,6rem); line-height:1.05; font-weight:900; max-width:860px; margin-bottom:26px; }
-  .hero h1 span { color:var(--gold); }
-  .hero p { font-size:clamp(.95rem,1.8vw,1.15rem); color:#aaa; max-width:500px; line-height:1.75; margin-bottom:46px; }
-  .hero-btns { display:flex; gap:14px; flex-wrap:wrap; justify-content:center; }
-  .btn-primary { background:var(--gold); color:#000; font-weight:700; font-size:.95rem; padding:15px 34px; border-radius:100px; text-decoration:none; display:flex; align-items:center; gap:9px; box-shadow:0 0 48px rgba(232,164,74,.28); transition:transform .2s,opacity .2s; }
-  .btn-primary:hover { transform:translateY(-2px); opacity:.9; }
-  .btn-secondary { border:1px solid #333; color:var(--text); font-size:.95rem; padding:15px 34px; border-radius:100px; text-decoration:none; transition:border-color .2s; }
-  .btn-secondary:hover { border-color:var(--gold); }
-  .scroll-hint { margin-top:70px; color:var(--muted); font-size:.75rem; letter-spacing:2px; text-transform:uppercase; animation:bounce 2s infinite; }
-  @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(6px)} }
+/* NAV */
+nav{position:fixed;top:0;width:100%;z-index:1000;padding:20px 40px;display:flex;justify-content:space-between;align-items:center;
+  background:rgba(8,8,10,.8);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.04);transition:all .3s}
+.nav-logo{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.1rem;color:var(--gold);letter-spacing:-.5px;display:flex;align-items:center;gap:8px}
+.nav-logo span{width:28px;height:28px;background:var(--gold);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.85rem}
+.nav-right{display:flex;align-items:center;gap:16px}
+.ph-badge{display:flex;align-items:center;gap:6px;padding:6px 14px;border-radius:8px;border:1px solid rgba(240,168,48,.25);background:rgba(240,168,48,.06);color:var(--gold);font-size:.75rem;font-weight:600;text-decoration:none;letter-spacing:.5px;transition:all .2s}
+.ph-badge:hover{background:rgba(240,168,48,.12);border-color:var(--gold)}
+.nav-dl{background:var(--gold);color:#000;font-weight:700;font-size:.8rem;padding:9px 20px;border-radius:100px;text-decoration:none;letter-spacing:.3px;transition:all .2s}
+.nav-dl:hover{opacity:.85;transform:translateY(-1px)}
 
-  /* PHONE MOCKUP */
-  .phone { width:220px; flex-shrink:0; border-radius:36px; border:8px solid #1c1c1e; background:#1c1c1e; box-shadow:0 30px 80px rgba(0,0,0,.7), inset 0 0 0 1px #333; overflow:hidden; position:relative; }
-  .phone::before { content:''; position:absolute; top:10px; left:50%; transform:translateX(-50%); width:70px; height:8px; background:#1c1c1e; border-radius:10px; z-index:10; }
-  .phone img { width:100%; display:block; border-radius:28px 28px 0 0; }
-  .phone-label { text-align:center; font-size:.75rem; color:var(--muted); margin-top:14px; letter-spacing:1px; text-transform:uppercase; }
+/* ── HERO ── */
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;padding:120px 24px 80px}
+.hero-bg{position:absolute;inset:0;z-index:0}
+.hero-bg::before{content:'';position:absolute;top:-30%;left:50%;transform:translateX(-50%);width:900px;height:900px;
+  background:radial-gradient(circle,rgba(240,168,48,.12) 0%,rgba(255,107,53,.06) 40%,transparent 70%);filter:blur(40px)}
+.hero-bg::after{content:'';position:absolute;bottom:0;left:0;right:0;height:200px;
+  background:linear-gradient(to top,var(--dark),transparent)}
+.hero-content{position:relative;z-index:2;max-width:1200px;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.hero-text{max-width:560px}
+.hero-pill{display:inline-flex;align-items:center;gap:8px;padding:6px 6px 6px 16px;border-radius:100px;
+  background:rgba(255,97,84,.08);border:1px solid rgba(255,97,84,.2);margin-bottom:28px;font-size:.78rem;color:#FF6154;font-weight:600}
+.hero-pill-live{background:#FF6154;color:#fff;padding:3px 10px;border-radius:100px;font-size:.68rem;letter-spacing:.5px;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
+.hero h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(2.6rem,5.5vw,4.2rem);font-weight:700;line-height:1.08;letter-spacing:-2px;margin-bottom:22px}
+.hero h1 .gold{background:linear-gradient(135deg,var(--gold),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:clamp(.95rem,1.6vw,1.12rem);color:var(--muted);line-height:1.7;margin-bottom:36px;max-width:440px}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.btn-app{display:inline-flex;align-items:center;gap:10px;background:#fff;color:#000;font-weight:700;font-size:.9rem;
+  padding:14px 28px;border-radius:14px;text-decoration:none;transition:all .2s;box-shadow:0 4px 30px rgba(255,255,255,.08)}
+.btn-app:hover{transform:translateY(-2px);box-shadow:0 8px 40px rgba(255,255,255,.12)}
+.btn-app svg{width:22px;height:22px}
+.btn-demo{display:inline-flex;align-items:center;gap:8px;color:var(--muted);font-size:.88rem;font-weight:500;text-decoration:none;padding:14px 20px;transition:color .2s}
+.btn-demo:hover{color:var(--text)}
 
-  /* SCREENSHOTS SHOWCASE */
-  .showcase { padding:100px 24px; overflow:hidden; }
-  .showcase-inner { max-width:1200px; margin:0 auto; }
-  .section-label { font-size:.72rem; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--gold); margin-bottom:14px; }
-  .section-title { font-family:'Playfair Display',serif; font-size:clamp(1.8rem,3.5vw,3rem); font-weight:900; margin-bottom:60px; max-width:560px; }
-  .phones-row { display:flex; gap:28px; align-items:flex-start; overflow-x:auto; padding-bottom:20px; scrollbar-width:none; }
-  .phones-row::-webkit-scrollbar { display:none; }
-  .phone-wrap { display:flex; flex-direction:column; align-items:center; }
-  /* offset alternating phones */
-  .phone-wrap:nth-child(even) { margin-top:40px; }
+/* PHONE HERO */
+.hero-phone-wrap{display:flex;justify-content:center;position:relative}
+.hero-phone{width:260px;border-radius:40px;border:6px solid #222;background:#111;box-shadow:0 40px 100px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.06);overflow:hidden;position:relative;
+  animation:float 6s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.hero-phone::before{content:'';position:absolute;top:8px;left:50%;transform:translateX(-50%);width:80px;height:6px;background:#222;border-radius:10px;z-index:10}
+.hero-phone img{width:100%;display:block;border-radius:34px}
+.hero-glow{position:absolute;width:340px;height:340px;border-radius:50%;
+  background:radial-gradient(circle,rgba(240,168,48,.2),transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);filter:blur(60px);z-index:-1}
 
-  /* FEATURES */
-  .features { padding:80px 24px 100px; max-width:1100px; margin:0 auto; }
-  .features-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:18px; }
-  .fcard { background:var(--card); border:1px solid #1e1e1e; border-radius:20px; padding:32px 28px; transition:border-color .3s,transform .3s; }
-  .fcard:hover { border-color:var(--gold); transform:translateY(-4px); }
-  .fcard-icon { font-size:1.9rem; margin-bottom:16px; }
-  .fcard h3 { font-family:'Playfair Display',serif; font-size:1.2rem; margin-bottom:10px; }
-  .fcard p { color:#888; line-height:1.65; font-size:.9rem; }
+/* SOCIAL PROOF BAR */
+.proof{padding:30px 24px;border-top:1px solid var(--card-border);border-bottom:1px solid var(--card-border);background:rgba(17,17,20,.5)}
+.proof-inner{max-width:900px;margin:0 auto;display:flex;justify-content:center;gap:48px;flex-wrap:wrap;align-items:center}
+.proof-item{text-align:center}
+.proof-num{font-family:'Space Grotesk',sans-serif;font-size:1.6rem;font-weight:700;color:var(--gold)}
+.proof-label{font-size:.72rem;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-top:2px}
 
-  /* HOW */
-  .how { background:#080808; padding:100px 24px; }
-  .how-inner { max-width:1100px; margin:0 auto; }
-  .steps { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:36px; margin-top:56px; }
-  .step { text-align:center; }
-  .step-num { width:54px; height:54px; border-radius:50%; background:rgba(232,164,74,.1); border:1px solid var(--gold); display:flex; align-items:center; justify-content:center; font-family:'Playfair Display',serif; font-size:1.3rem; color:var(--gold); margin:0 auto 18px; }
-  .step h3 { font-size:1.05rem; margin-bottom:8px; }
-  .step p { color:#777; font-size:.88rem; line-height:1.6; }
+/* ── HOW IT WORKS (CINEMATIC) ── */
+.how{padding:120px 24px;position:relative;overflow:hidden}
+.how::before{content:'';position:absolute;top:50%;right:-200px;width:600px;height:600px;
+  background:radial-gradient(circle,rgba(255,107,53,.06),transparent 70%);filter:blur(80px)}
+.how-inner{max-width:1100px;margin:0 auto}
+.section-tag{font-family:'Space Grotesk',sans-serif;font-size:.7rem;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+.section-head{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:700;letter-spacing:-1.5px;margin-bottom:60px;max-width:500px}
+.steps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.step-card{background:var(--card);border:1px solid var(--card-border);border-radius:20px;padding:36px 28px;position:relative;overflow:hidden;transition:all .4s}
+.step-card:hover{border-color:var(--gold);transform:translateY(-6px);box-shadow:0 20px 60px rgba(240,168,48,.08)}
+.step-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:0;transition:opacity .4s}
+.step-card:hover::before{opacity:1}
+.step-number{font-family:'Space Grotesk',sans-serif;font-size:3.5rem;font-weight:800;color:rgba(240,168,48,.08);position:absolute;top:16px;right:20px;line-height:1}
+.step-emoji{font-size:2rem;margin-bottom:18px;display:block}
+.step-card h3{font-family:'Space Grotesk',sans-serif;font-size:1.15rem;font-weight:700;margin-bottom:10px;letter-spacing:-.3px}
+.step-card p{color:var(--muted);font-size:.88rem;line-height:1.65}
 
-  /* RECIPES */
-  .recipes { background:linear-gradient(135deg,#111,#0c0c0c); border-top:1px solid #1a1a1a; border-bottom:1px solid #1a1a1a; padding:80px 24px; }
-  .recipes-inner { max-width:1100px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:40px; }
-  .recipes-inner h2 { font-family:'Playfair Display',serif; font-size:clamp(1.7rem,3vw,2.7rem); max-width:400px; }
-  .recipes-inner h2 span { color:var(--gold); }
-  .recipes-inner p { color:#888; margin-top:14px; max-width:360px; line-height:1.65; font-size:.95rem; }
-  .tags { display:flex; flex-wrap:wrap; gap:9px; max-width:400px; }
-  .tag { background:#1a1a1a; border:1px solid #2a2a2a; border-radius:100px; padding:7px 16px; font-size:.82rem; color:#bbb; }
-  .tag.hi { border-color:var(--gold); color:var(--gold); }
+/* ── SHOWCASE ── */
+.showcase{padding:100px 24px 120px;background:linear-gradient(180deg,var(--dark) 0%,#0c0c10 100%)}
+.showcase-inner{max-width:1200px;margin:0 auto}
+.showcase-head{text-align:center;margin-bottom:70px}
+.phones-scroll{display:flex;gap:24px;justify-content:center;flex-wrap:wrap;align-items:flex-start}
+.phone-card{display:flex;flex-direction:column;align-items:center;gap:14px;transition:transform .4s}
+.phone-card:hover{transform:translateY(-8px)}
+.phone-card:nth-child(even){margin-top:36px}
+.phone-frame{width:200px;border-radius:32px;border:5px solid #1c1c20;background:#1c1c20;box-shadow:0 24px 60px rgba(0,0,0,.5),inset 0 0 0 1px rgba(255,255,255,.04);overflow:hidden;position:relative}
+.phone-frame::before{content:'';position:absolute;top:6px;left:50%;transform:translateX(-50%);width:60px;height:5px;background:#1c1c20;border-radius:10px;z-index:10}
+.phone-frame img{width:100%;display:block}
+.phone-card-label{font-size:.72rem;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;font-weight:500}
 
-  /* DIETARY — new section */
-  .dietary { padding:80px 24px; max-width:1100px; margin:0 auto; display:flex; align-items:center; gap:80px; flex-wrap:wrap; }
-  .dietary-text { flex:1; min-width:260px; }
-  .dietary-text h2 { font-family:'Playfair Display',serif; font-size:clamp(1.7rem,3vw,2.7rem); margin-bottom:18px; }
-  .dietary-text h2 span { color:var(--gold); }
-  .dietary-text p { color:#888; line-height:1.7; font-size:.95rem; max-width:420px; }
-  .dietary-phone { flex-shrink:0; }
+/* ── FEATURES BENTO ── */
+.features{padding:100px 24px;max-width:1100px;margin:0 auto}
+.bento{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.bento-card{background:var(--card);border:1px solid var(--card-border);border-radius:20px;padding:36px 30px;position:relative;overflow:hidden;transition:all .4s}
+.bento-card:hover{border-color:rgba(240,168,48,.3);box-shadow:0 0 40px rgba(240,168,48,.05)}
+.bento-card.wide{grid-column:span 2}
+.bento-icon{width:48px;height:48px;border-radius:14px;background:rgba(240,168,48,.08);border:1px solid rgba(240,168,48,.15);
+  display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin-bottom:18px}
+.bento-card h3{font-family:'Space Grotesk',sans-serif;font-size:1.15rem;font-weight:700;margin-bottom:8px;letter-spacing:-.3px}
+.bento-card p{color:var(--muted);font-size:.88rem;line-height:1.65;max-width:400px}
 
-  /* PRICING */
-  .pricing { padding:80px 24px 100px; max-width:1100px; margin:0 auto; }
-  .pricing-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(270px,1fr)); gap:22px; margin-top:56px; }
-  .pcard { background:var(--card); border:1px solid #1e1e1e; border-radius:24px; padding:38px 32px; }
-  .pcard.featured { border-color:var(--gold); background:linear-gradient(145deg,#181510,#141414); box-shadow:0 0 60px rgba(232,164,74,.1); position:relative; }
-  .badge { position:absolute; top:18px; right:18px; background:var(--gold); color:#000; font-size:.68rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:4px 11px; border-radius:100px; }
-  .plan-name { font-size:.75rem; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--muted); margin-bottom:14px; }
-  .plan-price { font-family:'Playfair Display',serif; font-size:2.8rem; font-weight:900; }
-  .plan-price span { font-size:.95rem; font-weight:400; color:var(--muted); }
-  .plan-desc { color:#777; font-size:.88rem; margin:10px 0 26px; line-height:1.5; }
-  .plan-feats { list-style:none; display:flex; flex-direction:column; gap:11px; }
-  .plan-feats li { font-size:.88rem; color:#aaa; display:flex; gap:9px; align-items:flex-start; }
-  .plan-feats li::before { content:'✓'; color:var(--gold); font-weight:700; flex-shrink:0; }
+/* ── CUISINE TAGS ── */
+.cuisines{padding:80px 24px;border-top:1px solid var(--card-border);border-bottom:1px solid var(--card-border);background:#0a0a0d}
+.cuisines-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:60px;flex-wrap:wrap}
+.cuisines-text{max-width:420px}
+.cuisines-text h2{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.6rem,3vw,2.4rem);font-weight:700;letter-spacing:-1px;margin-bottom:14px}
+.cuisines-text h2 .gold{color:var(--gold)}
+.cuisines-text p{color:var(--muted);line-height:1.7;font-size:.92rem}
+.tags-wrap{display:flex;flex-wrap:wrap;gap:8px;max-width:440px}
+.tag{padding:8px 18px;border-radius:100px;font-size:.82rem;font-weight:500;border:1px solid var(--card-border);color:#999;background:var(--card);transition:all .3s;cursor:default}
+.tag:hover{border-color:var(--gold);color:var(--gold)}
+.tag.featured{border-color:var(--gold);color:var(--gold);background:rgba(240,168,48,.06)}
 
-  /* CTA */
-  .cta-wrap { padding:0 24px 100px; }
-  .cta { max-width:1052px; margin:0 auto; border-radius:28px; background:linear-gradient(135deg,rgba(232,164,74,.14),rgba(232,164,74,.04)); border:1px solid rgba(232,164,74,.2); padding:80px 40px; text-align:center; }
-  .cta h2 { font-family:'Playfair Display',serif; font-size:clamp(1.9rem,4vw,3rem); margin-bottom:14px; }
-  .cta p { color:#888; margin-bottom:38px; font-size:1rem; }
+/* ── PRICING ── */
+.pricing{padding:100px 24px;max-width:1100px;margin:0 auto}
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:56px}
+.price-card{background:var(--card);border:1px solid var(--card-border);border-radius:24px;padding:36px 28px;transition:all .4s}
+.price-card.pop{border-color:var(--gold);background:linear-gradient(165deg,#16130e,var(--card));box-shadow:0 0 80px rgba(240,168,48,.08);position:relative}
+.price-badge{position:absolute;top:-12px;right:20px;background:var(--gold);color:#000;font-size:.65rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:5px 14px;border-radius:100px}
+.plan-label{font-size:.7rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:16px}
+.plan-cost{font-family:'Space Grotesk',sans-serif;font-size:2.6rem;font-weight:800;letter-spacing:-2px}
+.plan-cost span{font-size:.85rem;font-weight:400;color:var(--muted);letter-spacing:0}
+.plan-note{color:var(--muted);font-size:.82rem;margin:8px 0 24px;line-height:1.5}
+.plan-list{list-style:none;display:flex;flex-direction:column;gap:10px}
+.plan-list li{font-size:.85rem;color:#aaa;display:flex;gap:8px;align-items:center}
+.plan-list li::before{content:'✓';color:var(--gold);font-weight:700;font-size:.8rem}
 
-  /* FOOTER */
-  footer { border-top:1px solid #1a1a1a; padding:36px 60px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:18px; }
-  footer .logo { font-size:.95rem; }
-  footer p,footer a { color:#555; font-size:.78rem; text-decoration:none; }
-  footer a:hover { color:var(--gold); }
-  .footer-links { display:flex; gap:20px; }
+/* ── DIETARY ── */
+.dietary{padding:80px 24px;background:#0a0a0d}
+.dietary-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:80px;flex-wrap:wrap}
+.dietary-text{flex:1;min-width:280px}
+.dietary-text h2{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.6rem,3vw,2.4rem);font-weight:700;letter-spacing:-1px;margin-bottom:14px}
+.dietary-text h2 .gold{color:var(--gold)}
+.dietary-text p{color:var(--muted);line-height:1.7;font-size:.92rem;max-width:420px}
+.dietary-phone-wrap{flex-shrink:0}
+.dietary-phone{width:190px;border-radius:32px;border:5px solid #1c1c20;background:#1c1c20;box-shadow:0 24px 60px rgba(0,0,0,.5);overflow:hidden}
+.dietary-phone img{width:100%;display:block}
 
-  @media(max-width:640px) {
-    nav { padding:18px 20px; }
-    footer { padding:28px 20px; flex-direction:column; text-align:center; }
-    .cta { border-radius:0; }
-    .cta-wrap { padding:0 0 80px; }
-  }
+/* ── FINAL CTA ── */
+.final-cta{padding:0 24px 120px}
+.cta-box{max-width:1060px;margin:0 auto;border-radius:28px;overflow:hidden;position:relative;padding:90px 40px;text-align:center;
+  background:linear-gradient(145deg,rgba(240,168,48,.1),rgba(255,107,53,.04));border:1px solid rgba(240,168,48,.15)}
+.cta-box::before{content:'';position:absolute;top:-50%;left:50%;transform:translateX(-50%);width:600px;height:600px;
+  background:radial-gradient(circle,rgba(240,168,48,.1),transparent 70%);filter:blur(80px)}
+.cta-box h2{font-family:'Space Grotesk',sans-serif;font-size:clamp(2rem,4vw,3rem);font-weight:800;letter-spacing:-1.5px;margin-bottom:14px;position:relative}
+.cta-box p{color:var(--muted);margin-bottom:36px;font-size:1rem;position:relative}
+.cta-box .btn-app{position:relative}
+
+/* ── FOOTER ── */
+footer{border-top:1px solid var(--card-border);padding:32px 40px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+.foot-logo{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.9rem;color:var(--gold)}
+footer p,footer a{color:var(--muted);font-size:.75rem;text-decoration:none}
+footer a:hover{color:var(--gold)}
+.foot-links{display:flex;gap:20px}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .hero-content{grid-template-columns:1fr;text-align:center}
+  .hero-text{margin:0 auto}
+  .hero-sub{margin-left:auto;margin-right:auto}
+  .hero-actions{justify-content:center}
+  .hero-phone-wrap{margin-top:40px}
+  .steps-grid{grid-template-columns:1fr}
+  .bento{grid-template-columns:1fr}
+  .bento-card.wide{grid-column:span 1}
+  .pricing-grid{grid-template-columns:1fr}
+  .cuisines-inner{flex-direction:column;text-align:center}
+  .cuisines-text{max-width:100%}
+  .tags-wrap{justify-content:center;max-width:100%}
+  .dietary-inner{flex-direction:column;text-align:center}
+  .dietary-text p{margin:0 auto}
+  .phones-scroll{gap:16px}
+  .phone-frame{width:160px}
+}
+@media(max-width:640px){
+  nav{padding:16px 20px}
+  .hero{padding:100px 20px 60px}
+  .hero h1{font-size:2.2rem;letter-spacing:-1px}
+  .proof-inner{gap:28px}
+  footer{padding:24px 20px;flex-direction:column;text-align:center}
+  .final-cta{padding:0 0 80px}
+  .cta-box{border-radius:0}
+}
 </style>
 </head>
 <body>
 
 <!-- NAV -->
 <nav>
-  <div class="logo">Tonight's Menu</div>
-  <a href="#download" class="nav-cta">Download Free</a>
+  <div class="nav-logo">
+    <span>🍽️</span> Tonight's Menu
+  </div>
+  <div class="nav-right">
+    <a href="#how" class="ph-badge">
+      ⭐ New on the App Store
+    </a>
+    <a href="https://apps.apple.com/us/app/tonights-menu/id6758466628" class="nav-dl">Download Free</a>
+  </div>
 </nav>
 
-<!-- HERO -->
+<!-- ── HERO ── -->
 <section class="hero">
-  <p class="eyebrow">Now Available on the App Store</p>
-  <h1>Stop Wondering.<br/><span>Start Cooking.</span></h1>
-  <p>Point your camera at your ingredients and get personalized recipe suggestions instantly. Dinner, solved.</p>
-  <div class="hero-btns">
-    <a href="#download" class="btn-primary">
-      <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-      Download on iOS
-    </a>
-    <a href="#how" class="btn-secondary">See How It Works</a>
-  </div>
-  <p class="scroll-hint">↓ explore</p>
-</section>
-
-<!-- SCREENSHOTS SHOWCASE -->
-<section class="showcase">
-  <div class="showcase-inner">
-    <p class="section-label">The App</p>
-    <h2 class="section-title">Beautifully designed. Incredibly simple.</h2>
-    <div class="phones-row">
-
-      <div class="phone-wrap">
-        <div class="phone">
-          <!-- REPLACE src WITH: screenshot_fridge_scanner.png -->
-          <img src="https://raw.githubusercontent.com/Wil369/tonightsmenu/main/screenshot_fridge_scanner.PNG" alt="Fridge Scanner"/>
-        </div>
-        <p class="phone-label">Fridge Scanner</p>
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-text">
+      <div class="hero-pill">
+        🚀 Now Live on the App Store
+        <span class="hero-pill-live">NEW</span>
       </div>
-
-      <div class="phone-wrap">
-        <div class="phone">
-          <!-- REPLACE src WITH: screenshot_browse.png -->
-          <img src="https://raw.githubusercontent.com/Wil369/tonightsmenu/main/screenshot_browse.PNG" alt="Browse Meals"/>
-        </div>
-        <p class="phone-label">Browse 105+ Recipes</p>
+      <h1>Your fridge knows<br/>what's for <span class="gold">dinner.</span></h1>
+      <p class="hero-sub">Snap a photo of your ingredients. AI instantly suggests recipes you can actually make. 105+ dishes from Caribbean classics to quick weeknight meals.</p>
+      <div class="hero-actions">
+        <a href="https://apps.apple.com/us/app/tonights-menu/id6758466628" class="btn-app">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+          Download on iOS — Free
+        </a>
+        <a href="#how" class="btn-demo">See how it works ↓</a>
       </div>
-
-      <div class="phone-wrap">
-        <div class="phone">
-          <!-- REPLACE src WITH: screenshot_roulette.png -->
-          <img src="https://raw.githubusercontent.com/Wil369/tonightsmenu/main/screenshot_roulette.PNG" alt="Dinner Roulette"/>
-        </div>
-        <p class="phone-label">Dinner Roulette</p>
+    </div>
+    <div class="hero-phone-wrap">
+      <div class="hero-glow"></div>
+      <div class="hero-phone">
+        <img src="https://raw.githubusercontent.com/Wil369/tonightsmenu/main/screenshot_fridge_scanner.PNG" alt="Tonight's Menu — AI Fridge Scanner"/>
       </div>
-
-      <div class="phone-wrap">
-        <div class="phone">
-          <!-- REPLACE src WITH: screenshot_recipe.png -->
-          <img src="https://raw.githubusercontent.com/Wil369/tonightsmenu/main/screenshot_recipe.PNG" alt="Recipe Detail"/>
-        </div>
-        <p class="phone-label">Recipe Details</p>
-      </div>
-
-      <div class="phone-wrap">
-        <div class="phone">
-          <!-- REPLACE src WITH: screenshot_shopping.png -->
-          <img src="https://raw.githubusercontent.com/Wil369/tonightsmenu/main/screenshot_shopping.PNG" alt="Shopping List"/>
-        </div>
-        <p class="phone-label">Smart Shopping List</p>
-      </div>
-
     </div>
   </div>
 </section>
 
-<!-- FEATURES -->
-<section class="features">
-  <p class="section-label">Features</p>
-  <h2 class="section-title">Everything dinner needs. Nothing it doesn't.</h2>
-  <div class="features-grid">
-    <div class="fcard">
-      <div class="fcard-icon">📸</div>
-      <h3>Fridge to Recipe</h3>
-      <p>Take a photo of your ingredients and get smart recipe suggestions in seconds. No more "what's for dinner?" stress.</p>
+<!-- SOCIAL PROOF -->
+<section class="proof">
+  <div class="proof-inner">
+    <div class="proof-item">
+      <div class="proof-num">105+</div>
+      <div class="proof-label">Recipes</div>
     </div>
-    <div class="fcard">
-      <div class="fcard-icon">🎰</div>
-      <h3>Dinner Roulette</h3>
-      <p>Can't decide? Spin the wheel and let Tonight's Menu make the call for you. Spontaneous meals, zero effort.</p>
+    <div class="proof-item">
+      <div class="proof-num">10+</div>
+      <div class="proof-label">Cuisines</div>
     </div>
-    <div class="fcard">
-      <div class="fcard-icon">🛒</div>
-      <h3>Smart Shopping List</h3>
-      <p>Missing an ingredient? The app builds your shopping list automatically — organized by recipe and ready to go.</p>
+    <div class="proof-item">
+      <div class="proof-num">AI</div>
+      <div class="proof-label">Powered</div>
     </div>
-    <div class="fcard">
-      <div class="fcard-icon">🔄</div>
-      <h3>Ingredient Substitutions</h3>
-      <p>Out of something? Tap any ingredient for smart swaps so you never have to abandon a recipe you love.</p>
+    <div class="proof-item">
+      <div class="proof-num">Free</div>
+      <div class="proof-label">To Start</div>
     </div>
   </div>
 </section>
 
-<!-- HOW IT WORKS -->
+<!-- ── HOW IT WORKS ── -->
 <section class="how" id="how">
   <div class="how-inner">
-    <p class="section-label">How It Works</p>
-    <h2 class="section-title">Three steps to dinner.</h2>
-    <div class="steps">
-      <div class="step">
-        <div class="step-num">1</div>
-        <h3>Snap Your Ingredients</h3>
-        <p>Open the app and take a photo of whatever you have on hand — fridge, pantry, anything.</p>
+    <p class="section-tag">How It Works</p>
+    <h2 class="section-head">Three taps to dinner.</h2>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-number">01</div>
+        <span class="step-emoji">📸</span>
+        <h3>Snap your fridge</h3>
+        <p>Open the app and take a photo of whatever you have — fridge, pantry, countertop. The AI sees everything.</p>
       </div>
-      <div class="step">
-        <div class="step-num">2</div>
-        <h3>Get Instant Recipes</h3>
-        <p>Tonight's Menu instantly suggests recipes tailored to exactly what you have available.</p>
+      <div class="step-card">
+        <div class="step-number">02</div>
+        <span class="step-emoji">🧠</span>
+        <h3>AI finds your recipes</h3>
+        <p>GPT-4o vision identifies your ingredients and matches them to recipes you can make right now. Instant results.</p>
       </div>
-      <div class="step">
-        <div class="step-num">3</div>
-        <h3>Cook & Enjoy</h3>
-        <p>Follow the recipe step by step, check off your shopping list, and eat something amazing.</p>
+      <div class="step-card">
+        <div class="step-number">03</div>
+        <span class="step-emoji">🍽️</span>
+        <h3>Cook something amazing</h3>
+        <p>Follow step-by-step instructions, check off your shopping list, and enjoy a meal you didn't think was possible.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- RECIPES -->
-<section class="recipes">
-  <div class="recipes-inner">
-    <div>
-      <h2>105+ Recipes.<br/>Every <span>cuisine.</span></h2>
-      <p>From quick weeknight dinners to Caribbean classics — a diverse, growing recipe library built for real kitchens and real people.</p>
+<!-- ── SCREENSHOTS SHOWCASE ── -->
+<section class="showcase">
+  <div class="showcase-inner">
+    <div class="showcase-head">
+      <p class="section-tag">The App</p>
+      <h2 class="section-head" style="max-width:100%;text-align:center">Beautiful. Powerful. Dead simple.</h2>
     </div>
-    <div class="tags">
-      <span class="tag hi">🇭🇹 Caribbean & Haitian</span>
+    <div class="phones-scroll">
+      <div class="phone-card">
+        <div class="phone-frame">
+          <img src="https://raw.githubusercontent.com/Wil369/tonightsmenu/main/screenshot_fridge_scanner.PNG" alt="Fridge Scanner"/>
+        </div>
+        <span class="phone-card-label">AI Fridge Scanner</span>
+      </div>
+      <div class="phone-card">
+        <div class="phone-frame">
+          <img src="https://raw.githubusercontent.com/Wil369/tonightsmenu/main/screenshot_browse.PNG" alt="Browse Recipes"/>
+        </div>
+        <span class="phone-card-label">105+ Recipes</span>
+      </div>
+      <div class="phone-card">
+        <div class="phone-frame">
+          <img src="https://raw.githubusercontent.com/Wil369/tonightsmenu/main/screenshot_roulette.PNG" alt="Dinner Roulette"/>
+        </div>
+        <span class="phone-card-label">Dinner Roulette</span>
+      </div>
+      <div class="phone-card">
+        <div class="phone-frame">
+          <img src="https://raw.githubusercontent.com/Wil369/tonightsmenu/main/screenshot_recipe.PNG" alt="Recipe Detail"/>
+        </div>
+        <span class="phone-card-label">Step-by-Step</span>
+      </div>
+      <div class="phone-card">
+        <div class="phone-frame">
+          <img src="https://raw.githubusercontent.com/Wil369/tonightsmenu/main/screenshot_shopping.PNG" alt="Shopping List"/>
+        </div>
+        <span class="phone-card-label">Smart Shopping</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FEATURES BENTO ── -->
+<section class="features">
+  <p class="section-tag">Features</p>
+  <h2 class="section-head">Everything dinner needs.</h2>
+  <div class="bento">
+    <div class="bento-card">
+      <div class="bento-icon">📸</div>
+      <h3>AI Fridge Scanner</h3>
+      <p>Point your camera at your ingredients. GPT-4o identifies what you have and instantly matches recipes from the library.</p>
+    </div>
+    <div class="bento-card">
+      <div class="bento-icon">🎰</div>
+      <h3>Dinner Roulette</h3>
+      <p>Can't decide? Spin the wheel and let the app choose. Spontaneous meals, zero decision fatigue.</p>
+    </div>
+    <div class="bento-card">
+      <div class="bento-icon">🛒</div>
+      <h3>Smart Shopping List</h3>
+      <p>Missing something? The app auto-builds your grocery list organized by recipe — check items off as you shop.</p>
+    </div>
+    <div class="bento-card">
+      <div class="bento-icon">🔄</div>
+      <h3>Ingredient Substitutions</h3>
+      <p>Out of something? Tap any ingredient for smart swaps — dairy-free, gluten-free, vegan alternatives instantly.</p>
+    </div>
+    <div class="bento-card wide">
+      <div class="bento-icon">📅</div>
+      <h3>Weekly Meal Planner</h3>
+      <p>Drag recipes into your week. Plan breakfast, lunch, dinner — even date night and meal prep days. Your whole week of meals, organized in seconds.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── CUISINE TAGS ── -->
+<section class="cuisines">
+  <div class="cuisines-inner">
+    <div class="cuisines-text">
+      <h2>105+ recipes.<br/>Every <span class="gold">cuisine.</span></h2>
+      <p>From quick weeknight pasta to Caribbean classics your grandma would approve of. A diverse, growing library built for real kitchens and real people.</p>
+    </div>
+    <div class="tags-wrap">
+      <span class="tag featured">🇭🇹 Caribbean & Haitian</span>
       <span class="tag">🍝 Italian</span>
       <span class="tag">🥢 Asian</span>
       <span class="tag">🫔 Mexican</span>
@@ -263,91 +385,92 @@
       <span class="tag">🍲 Comfort Food</span>
       <span class="tag">⚡ Quick & Easy</span>
       <span class="tag">🌿 Vegetarian</span>
+      <span class="tag">🥩 BBQ & Grill</span>
+      <span class="tag">🍜 Soups & Stews</span>
     </div>
   </div>
 </section>
 
-<!-- DIETARY FILTERS -->
-<section style="padding:80px 24px; background:#0a0a0a;">
-  <div class="dietary">
+<!-- ── DIETARY SECTION ── -->
+<section class="dietary">
+  <div class="dietary-inner">
     <div class="dietary-text">
-      <p class="section-label" style="margin-bottom:14px;">Dietary Preferences</p>
-      <h2>Cooks for <span>everyone.</span></h2>
-      <p style="margin-top:16px;">Vegetarian, vegan, gluten-free, dairy-free, halal, low carb — set your dietary preferences once and Tonight's Menu filters every recipe automatically. Even add specific ingredients to avoid.</p>
+      <p class="section-tag">Dietary Preferences</p>
+      <h2>Cooks for <span class="gold">everyone.</span></h2>
+      <p style="margin-top:14px">Vegetarian, vegan, gluten-free, dairy-free, halal, low carb — set your preferences once and every recipe filters automatically. Even add specific ingredients to avoid.</p>
     </div>
-    <div class="dietary-phone">
-      <div class="phone" style="width:200px;">
-        <!-- REPLACE src WITH: screenshot_dietary.png -->
+    <div class="dietary-phone-wrap">
+      <div class="dietary-phone">
         <img src="https://raw.githubusercontent.com/Wil369/tonightsmenu/main/screenshot_dietary.PNG" alt="Dietary Filters"/>
       </div>
     </div>
   </div>
 </section>
 
-<!-- PRICING -->
+<!-- ── PRICING ── -->
 <section class="pricing">
-  <p class="section-label">Pricing</p>
-  <h2 class="section-title">Start free. Upgrade anytime.</h2>
+  <p class="section-tag">Pricing</p>
+  <h2 class="section-head">Start free. Upgrade when you're hooked.</h2>
   <div class="pricing-grid">
-    <div class="pcard">
-      <p class="plan-name">Free</p>
-      <p class="plan-price">$0</p>
-      <p class="plan-desc">Try it with no commitment.</p>
-      <ul class="plan-feats">
+    <div class="price-card">
+      <p class="plan-label">Free</p>
+      <p class="plan-cost">$0</p>
+      <p class="plan-note">No credit card. No commitment.</p>
+      <ul class="plan-list">
         <li>5 free fridge scans</li>
-        <li>Full recipe library access</li>
-        <li>Dinner roulette spinner</li>
+        <li>Full recipe library</li>
+        <li>Dinner roulette</li>
         <li>Shopping list builder</li>
       </ul>
     </div>
-    <div class="pcard featured">
-      <span class="badge">Best Value</span>
-      <p class="plan-name">Annual</p>
-      <p class="plan-price">$29.99<span>/year</span></p>
-      <p class="plan-desc">Under $2.50/month. Unlimited everything.</p>
-      <ul class="plan-feats">
+    <div class="price-card pop">
+      <span class="price-badge">Best Value</span>
+      <p class="plan-label">Annual</p>
+      <p class="plan-cost">$29.99<span> /year</span></p>
+      <p class="plan-note">That's less than $2.50/month.</p>
+      <ul class="plan-list">
         <li>Unlimited fridge scans</li>
         <li>Full recipe library</li>
         <li>Ingredient substitutions</li>
         <li>Smart shopping lists</li>
-        <li>Dietary preference filters</li>
+        <li>Dietary filters</li>
         <li>New recipes added regularly</li>
       </ul>
     </div>
-    <div class="pcard">
-      <p class="plan-name">Monthly</p>
-      <p class="plan-price">$4.99<span>/mo</span></p>
-      <p class="plan-desc">Full access, cancel anytime.</p>
-      <ul class="plan-feats">
+    <div class="price-card">
+      <p class="plan-label">Monthly</p>
+      <p class="plan-cost">$4.99<span> /mo</span></p>
+      <p class="plan-note">Full access. Cancel anytime.</p>
+      <ul class="plan-list">
         <li>Unlimited fridge scans</li>
         <li>Full recipe library</li>
         <li>Ingredient substitutions</li>
         <li>Smart shopping lists</li>
-        <li>Dietary preference filters</li>
+        <li>Dietary filters</li>
       </ul>
     </div>
   </div>
 </section>
 
-<!-- CTA -->
-<div class="cta-wrap" id="download">
-  <div class="cta">
+<!-- ── FINAL CTA ── -->
+<div class="final-cta" id="download">
+  <div class="cta-box">
     <h2>Dinner starts here.</h2>
-    <p>Download Tonight's Menu free and never stress about what to cook again.</p>
-    <a href="#" class="btn-primary" style="display:inline-flex;">
-      <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-      Download on the App Store
+    <p>Download free. Never stare at your fridge wondering again.</p>
+    <a href="https://apps.apple.com/us/app/tonights-menu/id6758466628" class="btn-app" style="display:inline-flex">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+      Download on the App Store — Free
     </a>
   </div>
 </div>
 
 <!-- FOOTER -->
 <footer>
-  <div class="logo">Tonight's Menu</div>
+  <div class="foot-logo">Tonight's Menu</div>
   <p>© 2026 Market Soleil L.L.C. All rights reserved.</p>
-  <div class="footer-links">
-    <a href="/privacy">Privacy Policy</a>
-    <a href="/support">Support</a>
+  <div class="foot-links">
+    <a href="https://tonightsmenu.marketsoleil.com/privacy">Privacy Policy</a>
+    <a href="mailto:support@marketsoleil.com">Support</a>
     <a href="https://marketsoleil.com">marketsoleil.com</a>
   </div>
 </footer>
